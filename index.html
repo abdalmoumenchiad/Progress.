@@ -1,2990 +1,1627 @@
 <!DOCTYPE html>
-
 <html lang="ar" dir="rtl">
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
 <title>بوابة الطالب - المركز الجامعي بريكة</title>
 
-
-
 <style>
-
 * {
-
   box-sizing: border-box;
-
   margin: 0;
-
   padding: 0;
-
 }
-
-
 
 :root {
-
   --bg-main: #f2f3f7;
-
   --bg-card: #fff;
-
   --bg-section: #e6e8f0;
-
   --text-main: #181a20;
-
   --text-muted: #5e6272;
-
   --nav-bg: #36384e;
-
   --accent-green: #0b8767;
-
   --accent-green-hover: #097358;
-
   --border-subtle: rgba(0,0,0,.08);
-
   --danger-bg: #ff8e88;
-
   --danger-text: #4a1210;
 
-
-
   --card-w: min(calc(100dvh - 155px), calc(92vw * 1.65));
-
   --card-h: calc(var(--card-w) / 1.65);
-
 }
-
-
 
 body.dark-theme {
-
   --bg-main: #121518;
-
   --bg-card: #1e2229;
-
   --bg-section: #282c37;
-
   --text-main: #f4f5f7;
-
   --text-muted: #a8aebf;
-
   --nav-bg: #383a50;
-
   --accent-green: #0a8767;
-
   --border-subtle: rgba(255,255,255,.08);
-
   --danger-bg: #ff948e;
-
   --danger-text: #3d0c0a;
-
 }
-
-
 
 html, body {
-
   width: 100%;
-
   min-height: 100%;
-
   min-height: 100dvh;
-
   background: var(--bg-main);
-
   color: var(--text-main);
-
   font-family: Tahoma, "Segoe UI", Arial, sans-serif;
-
   overflow-x: hidden;
-
   transition: background .25s ease, color .25s ease;
-
   -webkit-tap-highlight-color: transparent;
-
 }
-
-
 
 button {
-
   font-family: inherit;
-
 }
-
-
 
 /* =========================
-
-   إدارة الصفحات
-
+   شاشة الدخول
 ========================= */
 
-
-
-.view {
-
-  display: none;
-
-  width: 100%;
-
-  min-height: 100vh;
-
-  min-height: 100dvh;
-
-  padding-bottom: 105px;
-
-}
-
-
-
-.view.active {
-
-  display: flex;
-
-  flex-direction: column;
-
-}
-
-
-
-/* =========================
-
-   الصفحة الرئيسية
-
-========================= */
-
-
-
-.home-container {
-
-  width: 100%;
-
-  max-width: 540px;
-
-  margin: 0 auto;
-
-  padding: 16px 13px 25px;
-
-}
-
-
-
-.top-bar {
-
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: center;
-
-  margin-bottom: 16px;
-
-}
-
-
-
-.top-bar h1 {
-
-  font-size: 23px;
-
-  font-weight: 800;
-
-}
-
-
-
-.theme-icon-btn {
-
-  background: transparent;
-
-  border: none;
-
-  color: var(--text-main);
-
-  cursor: pointer;
-
-  padding: 6px;
-
-  border-radius: 50%;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-}
-
-
-
-.theme-icon-btn svg {
-
-  width: 26px;
-
-  height: 26px;
-
-  stroke: currentColor;
-
-  fill: none;
-
-  stroke-width: 2;
-
-}
-
-
-
-/* السلايدر */
-
-
-
-.banner-wrapper {
-
-  width: 100%;
-
-  margin-bottom: 18px;
-
-}
-
-
-
-.banner-slider {
-
-  position: relative;
-
-  width: 100%;
-
-  aspect-ratio: 16 / 5.4;
-
-  border-radius: 16px;
-
-  overflow: hidden;
-
-  border: 1.5px solid #d4af37;
-
-  background: #1b2824;
-
-  box-shadow: 0 6px 18px rgba(0,0,0,.15);
-
-}
-
-
-
-.banner-slide {
-
-  position: absolute;
-
-  inset: 0;
-
-  opacity: 0;
-
-  transition: opacity .6s ease-in-out;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-}
-
-
-
-.banner-slide.active {
-
-  opacity: 1;
-
-  z-index: 1;
-
-}
-
-
-
-.banner-slide img {
-
-  width: 100%;
-
-  height: 100%;
-
-  object-fit: cover;
-
-  display: block;
-
-}
-
-
-
-.banner-fallback {
-
-  width: 100%;
-
-  height: 100%;
-
-  padding: 12px 18px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  background: linear-gradient(135deg,#0d2b22,#164a3a,#d4af37);
-
-  color: #fff;
-
-}
-
-
-
-.banner-fallback h2 {
-
-  font-size: 20px;
-
-  color: #f3c64f;
-
-  margin-bottom: 4px;
-
-}
-
-
-
-.banner-fallback p {
-
-  font-size: 12px;
-
-}
-
-
-
-.banner-dots {
-
-  display: flex;
-
-  justify-content: center;
-
-  gap: 6px;
-
-  margin-top: 8px;
-
-}
-
-
-
-.banner-dot {
-
-  width: 8px;
-
-  height: 8px;
-
-  border-radius: 99px;
-
-  background: rgba(150,155,170,.45);
-
-  border: none;
-
-  cursor: pointer;
-
-  transition: all .3s ease;
-
-}
-
-
-
-.banner-dot.active {
-
-  width: 22px;
-
-  background: var(--accent-green);
-
-}
-
-
-
-/* الخدمات */
-
-
-
-.services-grid {
-
-  display: grid;
-
-  grid-template-columns: repeat(2,minmax(0,1fr));
-
-  gap: 10px;
-
-}
-
-
-
-.service-card {
-
-  background: var(--accent-green);
-
-  color: white;
-
-  border: none;
-
-  border-radius: 13px;
-
-  padding: 12px 7px;
-
-  min-height: 78px;
-
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 7px;
-
-  cursor: pointer;
-
-  font-size: 12.5px;
-
-  font-weight: 700;
-
-  text-align: center;
-
-  transition: transform .15s, background .2s;
-
-  box-shadow: 0 3px 10px rgba(11,135,103,.2);
-
-}
-
-
-
-.service-card:hover {
-
-  background: var(--accent-green-hover);
-
-}
-
-
-
-.service-card:active {
-
-  transform: scale(.97);
-
-}
-
-
-
-.service-card svg {
-
-  width: 22px;
-
-  height: 22px;
-
-  fill: currentColor;
-
-  flex-shrink: 0;
-
-}
-
-
-
-/* =========================
-
-   صفحة البطاقات
-
-========================= */
-
-
-
-#view-cards {
-
-  justify-content: center;
-
-  align-items: center;
-
-  padding: 8px 4px 130px;
-
-}
-
-
-
-.card-frame {
-
-  position: relative;
-
-  width: var(--card-h);
-
-  height: var(--card-w);
-
-  perspective: 2200px;
-
-}
-
-
-
-.card-scene {
-
-  position: absolute;
-
-  top: 50%;
-
-  left: 50%;
-
-  width: var(--card-w);
-
-  height: var(--card-h);
-
-  cursor: pointer;
-
-  outline: none;
-
-  -webkit-tap-highlight-color: transparent;
-
-  transform: translate(-50%,-50%) rotate(-90deg);
-
-}
-
-
-
-.card-inner {
-
-  position: relative;
-
-  width: 100%;
-
-  height: 100%;
-
-  transform-style: preserve-3d;
-
-  transition: transform .85s cubic-bezier(.22,.75,.28,1);
-
-  will-change: transform;
-
-}
-
-
-
-.card-scene.is-flipped .card-inner {
-
-  transform: rotateX(180deg);
-
-}
-
-
-
-.card-face {
-
-  position: absolute;
-
-  inset: 0;
-
-  overflow: hidden;
-
-  border: 1px solid rgba(160,157,170,.45);
-
-  border-radius: 4.2% / 6.8%;
-
-  color: #1f1d24;
-
-  backface-visibility: hidden;
-
-  -webkit-backface-visibility: hidden;
-
-  transform: rotateX(0deg);
-
-
-
-  background:
-
-    radial-gradient(circle at 38% 48%,rgba(235,165,195,.24),transparent 42%),
-
-    radial-gradient(circle at 65% 42%,rgba(145,210,190,.22),transparent 45%),
-
-    radial-gradient(circle at 52% 72%,rgba(240,215,145,.22),transparent 48%),
-
-    repeating-radial-gradient(circle at 42% 48%,rgba(170,160,185,.08) 0px,rgba(170,160,185,.08) 2px,transparent 2px,transparent 9px),
-
-    linear-gradient(125deg,#fcfcfd,#f3f2f7,#fafafc);
-
-
-
-  box-shadow:
-
-    0 12px 30px rgba(0,0,0,.25),
-
-    inset 0 0 0 6px rgba(255,255,255,.35);
-
-}
-
-
-
-.card-back {
-
-  transform: rotateX(180deg);
-
-}
-
-
-
-.header-lines {
-
-  position: absolute;
-
-  top: 3.4%;
-
-  left: 26%;
-
-  width: 48%;
-
-  text-align: center;
-
-  line-height: 1.32;
-
-  font-weight: 700;
-
-  color: #3f3d47;
-
-  font-size: clamp(9px,1.8vw,18px);
-
-  z-index: 2;
-
-}
-
-
-
-.logo {
-
-  position: absolute;
-
-  top: 4.5%;
-
-  right: 5.5%;
-
-  width: 13.5%;
-
-  height: 21.5%;
-
-  object-fit: contain;
-
-  z-index: 2;
-
-}
-
-
-
-.center-name {
-
-  position: absolute;
-
-  top: 13.5%;
-
-  left: 26%;
-
-  width: 48%;
-
-  text-align: center;
-
-  font-size: clamp(11px,2.25vw,23px);
-
-  font-weight: 800;
-
-  z-index: 2;
-
-}
-
-
-
-.main-title {
-
-  position: absolute;
-
-  top: 20.5%;
-
-  left: 22%;
-
-  width: 56%;
-
-  text-align: center;
-
-  font-size: clamp(21px,4.9vw,48px);
-
-  font-weight: 900;
-
-  letter-spacing: -.6px;
-
-  line-height: 1.15;
-
-  white-space: nowrap;
-
-  z-index: 2;
-
-}
-
-
-
-.portrait {
-
-  position: absolute;
-
-  top: 31%;
-
-  right: 2.3%;
-
-  width: 20.2%;
-
-  height: 47%;
-
-  object-fit: cover;
-
-  border-radius: 5%;
-
-  background: #d8d7dc;
-
-  border: 1px solid rgba(80,75,90,.2);
-
-  z-index: 2;
-
-}
-
-
-
-.qr {
-
-  position: absolute;
-
-  left: 5.8%;
-
-  top: 52.5%;
-
-  width: 16.5%;
-
-  height: 27.5%;
-
-  object-fit: contain;
-
-  image-rendering: pixelated;
-
-  z-index: 2;
-
-}
-
-
-
-.wave {
-
-  position: absolute;
-
-  left: 0;
-
-  bottom: 10.5%;
-
-  width: 100%;
-
-  height: 5.8%;
-
-  overflow: visible;
-
-  z-index: 2;
-
-}
-
-
-
-.footer-code {
-
-  position: absolute;
-
-  bottom: 3.4%;
-
-  left: 5.2%;
-
-  direction: ltr;
-
-  font-family: Arial,sans-serif;
-
-  font-size: clamp(9px,1.8vw,18px);
-
-  font-weight: 800;
-
-  white-space: nowrap;
-
-  z-index: 2;
-
-}
-
-
-
-.academic-year {
-
-  position: absolute;
-
-  bottom: 4.5%;
-
-  right: 4.8%;
-
-  font-size: clamp(10px,2.05vw,21px);
-
-  font-weight: 800;
-
-  white-space: nowrap;
-
-  z-index: 2;
-
-}
-
-
-
-.details {
-
-  position: absolute;
-
-  top: 31.5%;
-
-  right: 24.2%;
-
-  width: 36%;
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: .45%;
-
-  font-size: clamp(8.5px,1.72vw,17.5px);
-
-  line-height: 1.38;
-
-  font-weight: 700;
-
-  text-align: right;
-
-  z-index: 2;
-
-}
-
-
-
-.field {
-
-  width: 100%;
-
-  margin: 0;
-
-}
-
-
-
-.label {
-
-  display: block;
-
-  color: #3a3742;
-
-  font-weight: 700;
-
-}
-
-
-
-.value {
-
-  display: block;
-
-  color: #16151a;
-
-  font-weight: 800;
-
-}
-
-
-
-.birth {
-
-  display: flex;
-
-  flex-direction: row;
-
-  justify-content: space-between;
-
-  align-items: baseline;
-
-  gap: 6px;
-
-  white-space: nowrap;
-
-}
-
-
-
-.birth .date {
-
-  direction: ltr;
-
-  unicode-bidi: isolate;
-
-}
-
-
-
-.latin-names {
-
-  position: absolute;
-
-  top: 35.2%;
-
-  left: 25.5%;
-
-  width: 24%;
-
-  direction: ltr;
-
-  text-align: left;
-
-  font-family: Arial,sans-serif;
-
-  font-size: clamp(9.5px,1.9vw,19px);
-
-  line-height: 1.4;
-
-  font-weight: 800;
-
-  white-space: nowrap;
-
-  z-index: 2;
-
-}
-
-
-
-.latin-names div + div {
-
-  margin-top: 1.15em;
-
-}
-
-
-
-.details-back {
-
-  width: 50.9%;
-
-  right: 24.2%;
-
-  top: 32%;
-
-}
-
-
-
-.details-back .field + .field {
-
-  margin-top: 1.65em;
-
-}
-
-
-
-.details-back .value-row {
-
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: baseline;
-
-  width: 100%;
-
-}
-
-
-
-.details-back .latin {
-
-  direction: ltr;
-
-  font-family: Arial,sans-serif;
-
-  font-weight: 800;
-
-}
-
-
-
-.details-back .birth {
-
-  justify-content: flex-start;
-
-  gap: 1em;
-
-}
-
-
-
-/* =========================
-
-   صفحة حسابي
-
-========================= */
-
-
-
-.account-container {
-
-  width: 100%;
-
-  max-width: 540px;
-
-  margin: 0 auto;
-
-  padding: 0 13px 24px;
-
-}
-
-
-
-.profile-header {
-
-  background: var(--bg-section);
-
-  margin: 0 -13px 20px;
-
-  padding: 28px 16px 24px;
-
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: center;
-
-  text-align: center;
-
-  border-bottom: 1px solid var(--border-subtle);
-
-}
-
-
-
-.profile-avatar {
-
-  width: 82px;
-
-  height: 82px;
-
-  border-radius: 50%;
-
-  object-fit: cover;
-
-  border: 3px solid rgba(255,255,255,.25);
-
-  margin-bottom: 12px;
-
-  background: #ccc;
-
-}
-
-
-
-.profile-name {
-
-  font-size: 22px;
-
-  font-weight: 800;
-
-  margin-bottom: 4px;
-
-}
-
-
-
-.profile-uni {
-
-  font-size: 14px;
-
-  color: var(--text-muted);
-
-  font-weight: 700;
-
-}
-
-
-
-.section-title {
-
-  font-size: 14px;
-
-  font-weight: 700;
-
-  color: var(--text-muted);
-
-  margin: 16px 4px 8px;
-
-}
-
-
-
-.account-card {
-
-  background: var(--bg-section);
-
-  border-radius: 14px;
-
-  overflow: hidden;
-
-  border: 1px solid var(--border-subtle);
-
-}
-
-
-
-.account-row {
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  padding: 15px 16px;
-
-  border-bottom: 1px solid var(--border-subtle);
-
-}
-
-
-
-.account-row:last-child {
-
-  border-bottom: none;
-
-}
-
-
-
-.row-right {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 14px;
-
-}
-
-
-
-.row-icon {
-
-  width: 24px;
-
-  height: 24px;
-
-  color: #16a37f;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  flex-shrink: 0;
-
-}
-
-
-
-.row-icon svg {
-
-  width: 22px;
-
-  height: 22px;
-
-  fill: currentColor;
-
-}
-
-
-
-.row-text {
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 3px;
-
-}
-
-
-
-.row-label {
-
-  font-size: 14.5px;
-
-  font-weight: 700;
-
-}
-
-
-
-.row-sub {
-
-  font-size: 13px;
-
-  color: var(--text-muted);
-
-  font-weight: 600;
-
-}
-
-
-
-/* أزرار الإعدادات */
-
-
-
-.pill-toggle {
-
-  display: flex;
-
-  align-items: center;
-
-  background: rgba(0,0,0,.22);
-
-  border-radius: 10px;
-
-  padding: 3px;
-
-  gap: 3px;
-
-  cursor: pointer;
-
-  border: none;
-
-}
-
-
-
-.pill-option {
-
-  padding: 5px 10px;
-
-  border-radius: 8px;
-
-  font-size: 12px;
-
-  font-weight: 800;
-
-  color: #fff;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  transition: all .2s ease;
-
-}
-
-
-
-.pill-option.active {
-
-  background: #fff;
-
-  color: #181a20;
-
-  box-shadow: 0 2px 6px rgba(0,0,0,.2);
-
-}
-
-
-
-body.dark-theme .pill-option.active {
-
-  background: #6ee7c8;
-
-  color: #0d2b22;
-
-}
-
-
-
-.chevron-icon {
-
-  color: var(--text-muted);
-
-  font-size: 18px;
-
-  font-weight: 800;
-
-}
-
-
-
-.logout-btn {
-
-  width: 100%;
-
-  margin-top: 20px;
-
-  padding: 15px;
-
-  border: none;
-
-  border-radius: 14px;
-
-  background: var(--danger-bg);
-
-  color: var(--danger-text);
-
-  font-size: 15.5px;
-
-  font-weight: 800;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 10px;
-
-  cursor: pointer;
-
-}
-
-
-
-.logout-btn:active {
-
-  transform: scale(.98);
-
-}
-
-
-
-/* =========================
-
-   شريط التنقل السفلي
-
-   الرئيسية يسار - بطاقاتي وسط - حسابي يمين
-
-========================= */
-
-
-
-.nav {
-
-  position: fixed;
-
-  bottom: max(14px,env(safe-area-inset-bottom));
-
-  left: 50%;
-
-  transform: translateX(-50%);
-
-  width: calc(100% - 28px);
-
-  max-width: 560px;
-
-  height: 68px;
-
-  background: var(--nav-bg);
-
-  border-radius: 20px;
-
-  display: flex;
-
-  flex-direction: row;
-
-  direction: ltr;
-
-  padding: 4px;
-
-  gap: 4px;
-
-  z-index: 100;
-
-  box-shadow: 0 10px 30px rgba(0,0,0,.35);
-
-}
-
-
-
-.nav-item {
-
-  flex: 1;
-
-  min-width: 0;
-
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 3px;
-
-  color: #fff;
-
-  background: transparent;
-
-  border: none;
-
-  border-radius: 15px;
-
-  font-size: 11px;
-
-  font-weight: 800;
-
-  direction: rtl;
-
-  cursor: pointer;
-
-  transition: background .25s ease,color .25s ease;
-
-}
-
-
-
-.nav-item svg {
-
-  width: 22px;
-
-  height: 22px;
-
-  stroke: currentColor;
-
-  stroke-width: 2.1;
-
-  stroke-linecap: round;
-
-  stroke-linejoin: round;
-
-  fill: none;
-
-}
-
-
-
-.nav-item:active {
-
-  transform: scale(.97);
-
-}
-
-
-
-.nav-item.active {
-
-  background: #0b8767;
-
-  color: #fff;
-
-  box-shadow: 0 6px 16px rgba(11,135,103,.35);
-
-}
-
-
-
-body.dark-theme .nav-item.active {
-
-  background: #6ee7c8;
-
-  color: #0d2b22;
-
-}
-
-
-
-/* =========================
-
-   تحسين أحجام الهواتف
-
-========================= */
-
-
-
-@media (max-width: 600px) {
-
-  :root {
-
-    --card-w: min(calc(100dvh - 155px),calc(92vw * 1.65));
-
-  }
-
-
-
-  .top-bar h1 {
-
-    font-size: 21px;
-
-  }
-
-
-
-  .banner-slider {
-
-    border-radius: 13px;
-
-  }
-
-
-
-  .nav {
-
-    height: 68px;
-
-  }
-
-
-
-  .nav-item {
-
-    font-size: 11px;
-
-  }
-
-
-
-  .nav-item svg {
-
-    width: 22px;
-
-    height: 22px;
-
-  }
-
-}
-
-
-
-@media (max-width: 360px) {
-
-  .service-card {
-
-    font-size: 11px;
-
-    min-height: 72px;
-
-  }
-
-
-
-  .nav-item {
-
-    font-size: 10px;
-
-  }
-
-
-
-  .nav-item svg {
-
-    width: 20px;
-
-    height: 20px;
-
-  }
-
-}
-
-
-
-@media (min-width: 900px) {
-
-  :root {
-
-    --card-w: min(calc(100dvh - 140px),1060px);
-
-  }
-
-
-
-  .nav {
-
-    height: 82px;
-
-  }
-
-}
-
-
-
-
-
-
-/* بطاقة أفقية بالحجم المرجعي على الهواتف عند عرض الشاشة بالوضع الأفقي */
-@media (max-height: 700px) and (orientation: landscape) {
-  :root {
-    --card-w: min(92vw, calc((100dvh - 155px) * 1.65));
-    --card-h: calc(var(--card-w) / 1.65);
-  }
-
-  #view-cards {
-    justify-content: center;
-    align-items: center;
-    padding: 8px 4px 92px;
-    min-height: 100dvh;
-  }
-
-  .card-frame {
-    width: var(--card-w);
-    height: var(--card-h);
-  }
-
-  .card-scene {
-    width: var(--card-w);
-    height: var(--card-h);
-    transform: translate(-50%, -50%);
-  }
-
-  .nav {
-    width: min(560px, calc(100% - 28px));
-    height: 62px;
-    bottom: max(8px, env(safe-area-inset-bottom));
-  }
-}
-
-/* شاشة الدخول وملء الشاشة */
-#entry-screen {
+.entry-screen {
   position: fixed;
   inset: 0;
   z-index: 99999;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
-  background: #121518;
-  color: #f4f5f7;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(11,135,103,.18), transparent 45%),
+    radial-gradient(circle at 75% 80%, rgba(212,175,55,.12), transparent 50%),
+    var(--bg-main);
+  transition: opacity .4s ease, visibility .4s ease;
+}
+
+.entry-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.entry-content {
   text-align: center;
-}
-#entry-screen .entry-panel {
-  width: min(100%, 360px);
-  padding: 30px 22px;
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 20px;
-  background: #1e2229;
-  box-shadow: 0 18px 55px rgba(0,0,0,.35);
-}
-#entry-screen h2 {
-  margin-bottom: 12px;
-  font-size: 23px;
-}
-#entry-screen p {
-  margin-bottom: 22px;
-  color: #a8aebf;
-  font-size: 14px;
-  line-height: 1.8;
-}
-#enter-site-btn {
+  padding: 30px 24px;
+  max-width: 420px;
   width: 100%;
-  border: 0;
-  border-radius: 12px;
-  padding: 14px 18px;
-  background: #0b8767;
+}
+
+.entry-logo {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  margin: 0 auto 22px;
+  display: block;
+  border-radius: 50%;
+  background: #fff;
+  padding: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+}
+
+.entry-title {
+  font-size: 30px;
+  font-weight: 900;
+  margin-bottom: 8px;
+  color: var(--text-main);
+  letter-spacing: -.4px;
+}
+
+.entry-subtitle {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin-bottom: 34px;
+  font-weight: 700;
+}
+
+.entry-btn {
+  background: var(--accent-green);
   color: #fff;
-  font: inherit;
-  font-size: 16px;
+  border: none;
+  border-radius: 16px;
+  padding: 17px 52px;
+  font-size: 17px;
   font-weight: 800;
   cursor: pointer;
+  box-shadow: 0 8px 24px rgba(11,135,103,.4);
+  transition: transform .15s, background .2s, box-shadow .2s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
-#fullscreen-error {
+
+.entry-btn:hover {
+  background: var(--accent-green-hover);
+  box-shadow: 0 10px 28px rgba(11,135,103,.5);
+}
+
+.entry-btn:active {
+  transform: scale(.96);
+}
+
+.entry-hint {
+  margin-top: 22px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  font-weight: 600;
+  opacity: .85;
+  line-height: 1.6;
+}
+
+/* =========================
+   إدارة الصفحات
+========================= */
+
+.view {
   display: none;
-  margin-top: 14px;
-  color: #ffaaa5;
-  font-size: 13px;
-  line-height: 1.7;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-bottom: 105px;
 }
-body.site-locked {
+
+.view.active {
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================
+   الصفحة الرئيسية
+========================= */
+
+.home-container {
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+  padding: 16px 13px 25px;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.top-bar h1 {
+  font-size: 23px;
+  font-weight: 800;
+}
+
+.theme-icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-icon-btn svg {
+  width: 26px;
+  height: 26px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+/* السلايدر */
+
+.banner-wrapper {
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+.banner-slider {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 5.4;
+  border-radius: 16px;
   overflow: hidden;
+  border: 1.5px solid #d4af37;
+  background: #1b2824;
+  box-shadow: 0 6px 18px rgba(0,0,0,.15);
+}
+
+.banner-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity .6s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner-slide.active {
+  opacity: 1;
+  z-index: 1;
+}
+
+.banner-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.banner-fallback {
+  width: 100%;
+  height: 100%;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg,#0d2b22,#164a3a,#d4af37);
+  color: #fff;
+}
+
+.banner-fallback h2 {
+  font-size: 20px;
+  color: #f3c64f;
+  margin-bottom: 4px;
+}
+
+.banner-fallback p {
+  font-size: 12px;
+}
+
+.banner-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.banner-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 99px;
+  background: rgba(150,155,170,.45);
+  border: none;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.banner-dot.active {
+  width: 22px;
+  background: var(--accent-green);
+}
+
+/* الخدمات */
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 10px;
+}
+
+.service-card {
+  background: var(--accent-green);
+  color: white;
+  border: none;
+  border-radius: 13px;
+  padding: 12px 7px;
+  min-height: 78px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  cursor: pointer;
+  font-size: 12.5px;
+  font-weight: 700;
+  text-align: center;
+  transition: transform .15s, background .2s;
+  box-shadow: 0 3px 10px rgba(11,135,103,.2);
+}
+
+.service-card:hover {
+  background: var(--accent-green-hover);
+}
+
+.service-card:active {
+  transform: scale(.97);
+}
+
+.service-card svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+/* =========================
+   صفحة البطاقات
+========================= */
+
+#view-cards {
+  justify-content: center;
+  align-items: center;
+  padding: 8px 4px 130px;
+}
+
+.card-frame {
+  position: relative;
+  width: var(--card-h);
+  height: var(--card-w);
+  perspective: 2200px;
+}
+
+.card-scene {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--card-w);
+  height: var(--card-h);
+  cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  transform: translate(-50%,-50%) rotate(-90deg);
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform .85s cubic-bezier(.22,.75,.28,1);
+  will-change: transform;
+}
+
+.card-scene.is-flipped .card-inner {
+  transform: rotateX(180deg);
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border: 1px solid rgba(160,157,170,.45);
+  border-radius: 4.2% / 6.8%;
+  color: #1f1d24;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: rotateX(0deg);
+
+  background:
+    radial-gradient(circle at 38% 48%,rgba(235,165,195,.24),transparent 42%),
+    radial-gradient(circle at 65% 42%,rgba(145,210,190,.22),transparent 45%),
+    radial-gradient(circle at 52% 72%,rgba(240,215,145,.22),transparent 48%),
+    repeating-radial-gradient(circle at 42% 48%,rgba(170,160,185,.08) 0px,rgba(170,160,185,.08) 2px,transparent 2px,transparent 9px),
+    linear-gradient(125deg,#fcfcfd,#f3f2f7,#fafafc);
+
+  box-shadow:
+    0 12px 30px rgba(0,0,0,.25),
+    inset 0 0 0 6px rgba(255,255,255,.35);
+}
+
+.card-back {
+  transform: rotateX(180deg);
+}
+
+.header-lines {
+  position: absolute;
+  top: 3.4%;
+  left: 26%;
+  width: 48%;
+  text-align: center;
+  line-height: 1.32;
+  font-weight: 700;
+  color: #3f3d47;
+  font-size: clamp(9px,1.8vw,18px);
+  z-index: 2;
+}
+
+.logo {
+  position: absolute;
+  top: 4.5%;
+  right: 5.5%;
+  width: 13.5%;
+  height: 21.5%;
+  object-fit: contain;
+  z-index: 2;
+}
+
+.center-name {
+  position: absolute;
+  top: 13.5%;
+  left: 26%;
+  width: 48%;
+  text-align: center;
+  font-size: clamp(11px,2.25vw,23px);
+  font-weight: 800;
+  z-index: 2;
+}
+
+.main-title {
+  position: absolute;
+  top: 20.5%;
+  left: 22%;
+  width: 56%;
+  text-align: center;
+  font-size: clamp(21px,4.9vw,48px);
+  font-weight: 900;
+  letter-spacing: -.6px;
+  line-height: 1.15;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.portrait {
+  position: absolute;
+  top: 31%;
+  right: 2.3%;
+  width: 20.2%;
+  height: 47%;
+  object-fit: cover;
+  border-radius: 5%;
+  background: #d8d7dc;
+  border: 1px solid rgba(80,75,90,.2);
+  z-index: 2;
+}
+
+.qr {
+  position: absolute;
+  left: 5.8%;
+  top: 52.5%;
+  width: 16.5%;
+  height: 27.5%;
+  object-fit: contain;
+  image-rendering: pixelated;
+  z-index: 2;
+}
+
+.wave {
+  position: absolute;
+  left: 0;
+  bottom: 10.5%;
+  width: 100%;
+  height: 5.8%;
+  overflow: visible;
+  z-index: 2;
+}
+
+.footer-code {
+  position: absolute;
+  bottom: 3.4%;
+  left: 5.2%;
+  direction: ltr;
+  font-family: Arial,sans-serif;
+  font-size: clamp(9px,1.8vw,18px);
+  font-weight: 800;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.academic-year {
+  position: absolute;
+  bottom: 4.5%;
+  right: 4.8%;
+  font-size: clamp(10px,2.05vw,21px);
+  font-weight: 800;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.details {
+  position: absolute;
+  top: 31.5%;
+  right: 24.2%;
+  width: 36%;
+  display: flex;
+  flex-direction: column;
+  gap: .45%;
+  font-size: clamp(8.5px,1.72vw,17.5px);
+  line-height: 1.38;
+  font-weight: 700;
+  text-align: right;
+  z-index: 2;
+}
+
+.field {
+  width: 100%;
+  margin: 0;
+}
+
+.label {
+  display: block;
+  color: #3a3742;
+  font-weight: 700;
+}
+
+.value {
+  display: block;
+  color: #16151a;
+  font-weight: 800;
+}
+
+.birth {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.birth .date {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.latin-names {
+  position: absolute;
+  top: 35.2%;
+  left: 25.5%;
+  width: 24%;
+  direction: ltr;
+  text-align: left;
+  font-family: Arial,sans-serif;
+  font-size: clamp(9.5px,1.9vw,19px);
+  line-height: 1.4;
+  font-weight: 800;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.latin-names div + div {
+  margin-top: 1.15em;
+}
+
+.details-back {
+  width: 50.9%;
+  right: 24.2%;
+  top: 32%;
+}
+
+.details-back .field + .field {
+  margin-top: 1.65em;
+}
+
+.details-back .value-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
+}
+
+.details-back .latin {
+  direction: ltr;
+  font-family: Arial,sans-serif;
+  font-weight: 800;
+}
+
+.details-back .birth {
+  justify-content: flex-start;
+  gap: 1em;
+}
+
+/* =========================
+   صفحة حسابي
+========================= */
+
+.account-container {
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+  padding: 0 13px 24px;
+}
+
+.profile-header {
+  background: var(--bg-section);
+  margin: 0 -13px 20px;
+  padding: 28px 16px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.profile-avatar {
+  width: 82px;
+  height: 82px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(255,255,255,.25);
+  margin-bottom: 12px;
+  background: #ccc;
+}
+
+.profile-name {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.profile-uni {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin: 16px 4px 8px;
+}
+
+.account-card {
+  background: var(--bg-section);
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+}
+
+.account-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.account-row:last-child {
+  border-bottom: none;
+}
+
+.row-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.row-icon {
+  width: 24px;
+  height: 24px;
+  color: #16a37f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.row-icon svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+.row-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.row-label {
+  font-size: 14.5px;
+  font-weight: 700;
+}
+
+.row-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* أزرار الإعدادات */
+
+.pill-toggle {
+  display: flex;
+  align-items: center;
+  background: rgba(0,0,0,.22);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 3px;
+  cursor: pointer;
+  border: none;
+}
+
+.pill-option {
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s ease;
+}
+
+.pill-option.active {
+  background: #fff;
+  color: #181a20;
+  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+}
+
+body.dark-theme .pill-option.active {
+  background: #6ee7c8;
+  color: #0d2b22;
+}
+
+.chevron-icon {
+  color: var(--text-muted);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.logout-btn {
+  width: 100%;
+  margin-top: 20px;
+  padding: 15px;
+  border: none;
+  border-radius: 14px;
+  background: var(--danger-bg);
+  color: var(--danger-text);
+  font-size: 15.5px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.logout-btn:active {
+  transform: scale(.98);
+}
+
+/* =========================
+   شريط التنقل السفلي
+   الرئيسية يسار - بطاقاتي وسط - حسابي يمين
+========================= */
+
+.nav {
+  position: fixed;
+  bottom: max(14px,env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 28px);
+  max-width: 560px;
+  height: 68px;
+  background: var(--nav-bg);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: row;
+  direction: ltr;
+  padding: 4px;
+  gap: 4px;
+  z-index: 100;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+.nav-item {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: #fff;
+  background: transparent;
+  border: none;
+  border-radius: 15px;
+  font-size: 11px;
+  font-weight: 800;
+  direction: rtl;
+  cursor: pointer;
+  transition: background .25s ease,color .25s ease;
+}
+
+.nav-item svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  stroke-width: 2.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.nav-item:active {
+  transform: scale(.97);
+}
+
+.nav-item.active {
+  background: #0b8767;
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(11,135,103,.35);
+}
+
+body.dark-theme .nav-item.active {
+  background: #6ee7c8;
+  color: #0d2b22;
+}
+
+/* =========================
+   تحسين أحجام الهواتف
+========================= */
+
+@media (max-width: 600px) {
+  :root {
+    --card-w: min(calc(100dvh - 155px),calc(92vw * 1.65));
+  }
+
+  .top-bar h1 {
+    font-size: 21px;
+  }
+
+  .banner-slider {
+    border-radius: 13px;
+  }
+
+  .nav {
+    height: 68px;
+  }
+
+  .nav-item {
+    font-size: 11px;
+  }
+
+  .nav-item svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+@media (max-width: 360px) {
+  .service-card {
+    font-size: 11px;
+    min-height: 72px;
+  }
+
+  .nav-item {
+    font-size: 10px;
+  }
+
+  .nav-item svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (min-width: 900px) {
+  :root {
+    --card-w: min(calc(100dvh - 140px),1060px);
+  }
+
+  .nav {
+    height: 82px;
+  }
 }
 
 </style>
-
 </head>
 
+<body class="dark-theme">
 
+<noscript>
+  <style>
+    #entryScreen { display: none !important; }
+  </style>
+</noscript>
 
-<body class="dark-theme site-locked">
+<!-- =========================
+     شاشة الدخول
+========================= -->
 
-<div id="entry-screen" role="dialog" aria-modal="true" aria-labelledby="entry-title">
-  <div class="entry-panel">
-    <h2 id="entry-title">بوابة الطالب</h2>
-    <p>اضغط على الزر أدناه للدخول إلى الموقع في وضع ملء الشاشة</p>
-    <button id="enter-site-btn" type="button">دخول الموقع</button>
-    <div id="fullscreen-error">تعذر تفعيل ملء الشاشة. جرّب فتح الموقع في متصفح يدعم هذه الميزة، ثم اضغط مجدداً.</div>
+<div id="entryScreen" class="entry-screen" role="dialog" aria-label="شاشة الدخول">
+
+  <div class="entry-content">
+
+    <img src="img1.jpg" alt="شعار المركز الجامعي" class="entry-logo"
+         onerror="this.style.display='none';">
+
+    <h1 class="entry-title">بوابة الطالب</h1>
+    <p class="entry-subtitle">المركز الجامعي لبريكة</p>
+
+    <button id="enterBtn" class="entry-btn" type="button">دخول الموقع</button>
+
+    <p class="entry-hint">
+      سيتم تفعيل ملء الشاشة لإخفاء شريط المتصفح<br>
+      اضغط زر Escape للخروج وإعادة عرض شاشة الدخول
+    </p>
+
   </div>
 </div>
 
-
-
-
 <!-- =========================
-
      الرئيسية
-
 ========================= -->
-
-
 
 <section id="view-home" class="view">
 
-
-
   <div class="home-container">
 
-
-
     <header class="top-bar">
-
       <h1>بوابة الطالب</h1>
 
-
-
       <button class="theme-icon-btn" id="homeThemeBtn" type="button" aria-label="تبديل المظهر">
-
         <svg viewBox="0 0 24 24">
-
           <circle cx="12" cy="12" r="4"/>
-
           <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-
         </svg>
-
       </button>
-
     </header>
-
-
 
     <!-- السلايدر -->
 
-
-
     <div class="banner-wrapper">
-
-
 
       <div class="banner-slider">
 
-
-
         <div class="banner-slide active">
-
           <img src="banner1.jpg" alt="إعلان 1"
-
           onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-
-
 
           <div class="banner-fallback" style="display:none;">
-
             <div>
-
               <h2>انضم الآن</h2>
-
               <p>واكتشف مزايا لأكثر من 50 شريك</p>
-
             </div>
-
             <strong style="font-size:16px;color:#f3c64f;">STUDENT CAMPUCE</strong>
-
           </div>
-
         </div>
-
-
 
         <div class="banner-slide">
-
           <img src="banner2.jpg" alt="إعلان 2"
-
           onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
 
-
-
           <div class="banner-fallback" style="display:none;background:linear-gradient(135deg,#102a43,#0b8767);">
-
             <div>
-
               <h2>الخدمات الجامعية الرقمية</h2>
-
               <p>تابع جدولك الزمني ونقاطك بكل سهولة</p>
-
             </div>
-
             <strong style="font-size:16px;color:#fff;">PROGRES</strong>
-
           </div>
-
         </div>
 
-
-
       </div>
-
-
 
       <div class="banner-dots">
-
         <button class="banner-dot active" type="button" aria-label="الشريحة 1"></button>
-
         <button class="banner-dot" type="button" aria-label="الشريحة 2"></button>
-
       </div>
 
-
-
     </div>
-
-
 
     <!-- الخدمات -->
 
-
-
     <div class="services-grid">
 
-
-
       <button class="service-card" type="button">
-
         <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm1 7V3.5L18.5 9H15z"/></svg>
-
         <span>التبرئة الإلكترونية</span>
-
       </button>
 
-
-
       <button class="service-card" type="button">
-
         <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V9h14v11z"/></svg>
-
         <span>الجدول الزمني</span>
-
       </button>
 
-
-
       <button class="service-card" type="button">
-
         <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-
         <span>المجموعة و الفوج</span>
-
       </button>
 
-
-
       <button class="service-card" type="button">
-
         <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V9h14v11z"/></svg>
-
         <span>الجدول الزمني للإمتحانات</span>
-
       </button>
 
-
-
       <button class="service-card" type="button">
-
         <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zm0 14.5L5 13.7v4l7 3.8 7-3.8v-4l-7 3.8z"/></svg>
-
         <span>علامات الامتحانات</span>
-
       </button>
 
-
-
       <button class="service-card" type="button">
-
         <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-
         <span>التقييم المستمر</span>
-
       </button>
 
-
-
       <button class="service-card" type="button">
-
         <svg viewBox="0 0 24 24"><path d="M11 2v9h9a9 9 0 1 1-9-9zm2 0a9 9 0 0 1 9 9h-9V2z"/></svg>
-
         <span>النسبة المئوية للمقاييس</span>
-
       </button>
 
-
-
       <button class="service-card" type="button">
-
         <svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
-
         <span>كشف النقاط</span>
-
       </button>
 
-
-
       <button class="service-card" type="button">
-
         <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2z"/></svg>
-
         <span>الديون</span>
-
       </button>
 
-
-
       <button class="service-card" type="button">
-
         <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/></svg>
-
         <span>عطلة أكاديمية</span>
-
       </button>
 
-
-
       <button class="service-card" type="button">
-
         <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8h16v10z"/></svg>
-
         <span>تسجيلاتي</span>
-
       </button>
 
-
-
       <button class="service-card" type="button">
-
         <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-
         <span>الغيابات و الإقصاءات</span>
-
       </button>
 
-
-
       <button class="service-card" type="button">
-
         <svg viewBox="0 0 24 24"><path d="M15 11V5l-3-3-3 3v2H3v14h18V11h-6zm-8 8H5v-2h2v2zm0-4H5v-2h2v2zm6 4h-2v-2h2v2zm0-4h-2v-2h2v2zm6 4h-2v-2h2v2zm0-4h-2v-2h2v2z"/></svg>
-
         <span>خدمات جامعية</span>
-
       </button>
-
-
 
       <button class="service-card" type="button">
-
         <svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>
-
         <span>خدمات أخرى</span>
-
       </button>
-
-
 
     </div>
-
   </div>
-
 </section>
 
-
-
 <!-- =========================
-
      بطاقاتي
-
 ========================= -->
-
-
 
 <section id="view-cards" class="view active">
 
-
-
   <div class="card-frame">
 
-
-
     <div class="card-scene"
-
          id="cardScene"
-
          role="button"
-
          tabindex="0"
-
          aria-pressed="false"
-
          aria-label="اضغط لقلب البطاقة">
-
-
 
       <div class="card-inner">
 
-
-
         <!-- بطاقة الطالب -->
-
-
 
         <main class="card-face card-front" aria-label="بطاقة الطالب">
 
-
-
           <div class="header-lines">
-
             <div>الجمهورية الجزائرية الديمقراطية الشعبية</div>
-
             <div>وزارة التعليم العالي والبحث العلمي</div>
-
           </div>
-
-
 
           <img class="logo" src="img1.jpg" alt="شعار المركز الجامعي">
 
-
-
           <div class="center-name">المركز الجامعي لبريكة</div>
-
-
 
           <div class="main-title">بطاقة الطالب</div>
 
-
-
           <div class="latin-names">
-
             <div>BEN NAADG</div>
-
             <div>OUSSAMA</div>
-
           </div>
-
-
 
           <section class="details">
 
-
-
             <div class="field">
-
               <div class="label">اللقب</div>
-
               <div class="value">بن نعجة</div>
-
             </div>
 
-
-
             <div class="field">
-
               <div class="label">الاسم</div>
-
               <div class="value">أسامة</div>
-
             </div>
 
-
-
             <div class="field">
-
               <div class="label">تاريخ و مكان الميلاد</div>
-
               <div class="value birth">
-
                 <span class="date">2006-03-26</span>
-
                 <span>بريكة</span>
-
               </div>
-
             </div>
 
-
-
             <div class="field">
-
               <div class="label">الميدان</div>
-
               <div class="value">علوم و تكنولوجيا</div>
-
             </div>
-
-
 
             <div class="field">
-
               <div class="label">الفرع</div>
-
               <div class="value">علوم وتكنولوجيا</div>
-
               <div class="value">ليسانس سنة اولى</div>
-
             </div>
-
-
 
           </section>
 
-
-
           <img class="portrait" src="img3.jpeg" alt="الصورة الشخصية">
-
-
 
           <img class="qr" src="img2.jpeg" alt="رمز QR">
 
-
-
           <svg class="wave" viewBox="0 0 1029 45" preserveAspectRatio="none">
-
             <path d="M0 15 Q15 5 30 15 T60 15 T90 15 T120 15 T150 15 T180 15 T210 15 T240 15 T270 15 T300 15 T330 15 T360 15 T390 15 T420 15 T450 15 T480 15 T510 15 T540 15 T570 15 T600 15 T630 15 T660 15 T690 15 T720 15 T750 15 T780 15 T810 15 T840 15 T870 15 T900 15 T930 15 T960 15 T990 15 T1029 15" fill="none" stroke="#4d9a55" stroke-width="3" stroke-dasharray="1 3"/>
-
             <path d="M0 27 Q15 17 30 27 T60 27 T90 27 T120 27 T150 27 T180 27 T210 27 T240 27 T270 27 T300 27 T330 27 T360 27 T390 27 T420 27 T450 27 T480 27 T510 27 T540 27 T570 27 T600 27 T630 27 T660 27 T690 27 T720 27 T750 27 T780 27 T810 27 T840 27 T870 27 T900 27 T930 27 T960 27 T990 27 T1029 27" fill="none" stroke="#a8a5ae" stroke-width="1.7" stroke-dasharray="1 3"/>
-
             <path d="M0 37 Q15 27 30 37 T60 37 T90 37 T120 37 T150 37 T180 37 T210 37 T240 37 T270 37 T300 37 T330 37 T360 37 T390 37 T420 37 T450 37 T480 37 T510 37 T540 37 T570 37 T600 37 T630 37 T660 37 T690 37 T720 37 T750 37 T780 37 T810 37 T840 37 T870 37 T900 37 T930 37 T960 37 T990 37 T1029 37" fill="none" stroke="#4d9a55" stroke-width="2" stroke-dasharray="1 3"/>
-
           </svg>
-
-
 
           <div class="footer-code">CU05012026262635119004</div>
 
-
-
           <div class="academic-year">السنة الجامعية 2026/2027</div>
 
-
-
         </main>
-
-
 
         <!-- بطاقة النقل -->
 
-
-
         <main class="card-face card-back" aria-label="بطاقة النقل" aria-hidden="true">
 
-
-
           <div class="header-lines">
-
             <div>الجمهورية الجزائرية الديمقراطية الشعبية</div>
-
             <div>وزارة التعليم العالي والبحث العلمي</div>
-
           </div>
-
-
 
           <img class="logo" src="img5.jpeg" alt="شعار بطاقة النقل">
 
-
-
           <div class="center-name">المركز الجامعي لبريكة</div>
-
-
 
           <div class="main-title">بطاقة النقل</div>
 
-
-
           <section class="details details-back">
 
-
-
             <div class="field">
-
               <div class="label">اللقب</div>
-
               <div class="value-row">
-
                 <span class="value">بن نعجة</span>
-
                 <span class="latin">BEN NAADG</span>
-
               </div>
-
             </div>
 
-
-
             <div class="field">
-
               <div class="label">الاسم</div>
-
               <div class="value-row">
-
                 <span class="value">أسامة</span>
-
                 <span class="latin">OUSSAMA</span>
-
               </div>
-
             </div>
-
-
 
             <div class="field">
-
               <div class="label">تاريخ و مكان الميلاد</div>
-
               <div class="value birth">
-
                 <span class="date">2006-03-26</span>
-
                 <span>بريكة</span>
-
               </div>
-
             </div>
-
-
 
           </section>
 
-
-
           <img class="portrait" src="img3.jpeg" alt="الصورة الشخصية">
-
-
 
           <img class="qr" src="img2.jpeg" alt="رمز QR">
 
-
-
           <svg class="wave" viewBox="0 0 1029 45" preserveAspectRatio="none">
-
             <path d="M0 15 Q15 5 30 15 T60 15 T90 15 T120 15 T150 15 T180 15 T210 15 T240 15 T270 15 T300 15 T330 15 T360 15 T390 15 T420 15 T450 15 T480 15 T510 15 T540 15 T570 15 T600 15 T630 15 T660 15 T690 15 T720 15 T750 15 T780 15 T810 15 T840 15 T870 15 T900 15 T930 15 T960 15 T990 15 T1029 15" fill="none" stroke="#4d9a55" stroke-width="3" stroke-dasharray="1 3"/>
-
             <path d="M0 27 Q15 17 30 27 T60 27 T90 27 T120 27 T150 27 T180 27 T210 27 T240 27 T270 27 T300 27 T330 27 T360 27 T390 27 T420 27 T450 27 T480 27 T510 27 T540 27 T570 27 T600 27 T630 27 T660 27 T690 27 T720 27 T750 27 T780 27 T810 27 T840 27 T870 27 T900 27 T930 27 T960 27 T990 27 T1029 27" fill="none" stroke="#a8a5ae" stroke-width="1.7" stroke-dasharray="1 3"/>
-
             <path d="M0 37 Q15 27 30 37 T60 37 T90 37 T120 37 T150 37 T180 37 T210 37 T240 37 T270 37 T300 37 T330 37 T360 37 T390 37 T420 37 T450 37 T480 37 T510 37 T540 37 T570 37 T600 37 T630 37 T660 37 T690 37 T720 37 T750 37 T780 37 T810 37 T840 37 T870 37 T900 37 T930 37 T960 37 T990 37 T1029 37" fill="none" stroke="#4d9a55" stroke-width="2" stroke-dasharray="1 3"/>
-
           </svg>
-
-
 
           <div class="footer-code">CU05012026262635119004</div>
 
-
-
           <div class="academic-year">السنة الجامعية 2026/2027</div>
-
-
 
         </main>
 
-
-
       </div>
-
     </div>
-
   </div>
-
 </section>
 
-
-
 <!-- =========================
-
      حسابي
-
 ========================= -->
-
-
 
 <section id="view-account" class="view">
 
-
-
   <div class="account-container">
 
-
-
     <div class="profile-header">
-
       <img class="profile-avatar" src="img3.jpeg" alt="الصورة الشخصية">
-
       <div class="profile-name">بن نعجة أسامة</div>
-
       <div class="profile-uni">المركز الجامعي لبريكة</div>
-
     </div>
-
-
 
     <div class="section-title">معلومات شخصية</div>
 
-
-
     <div class="account-card">
 
-
-
       <div class="account-row">
-
         <div class="row-right">
-
           <div class="row-icon">
-
             <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
-
           </div>
-
           <div class="row-text">
-
             <div class="row-label">مكان الميلاد</div>
-
             <div class="row-sub">بريكة</div>
-
           </div>
-
         </div>
-
       </div>
-
-
 
       <div class="account-row">
-
         <div class="row-right">
-
           <div class="row-icon">
-
             <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V9h14v11z"/></svg>
-
           </div>
-
           <div class="row-text">
-
             <div class="row-label">تاريخ الميلاد</div>
-
             <div class="row-sub" dir="ltr" style="text-align:right;">2006-03-26</div>
-
           </div>
-
         </div>
-
       </div>
-
-
 
     </div>
-
-
 
     <div class="section-title">الإعدادات</div>
 
-
-
     <div class="account-card">
 
-
-
       <div class="account-row">
-
         <div class="row-right">
-
           <div class="row-icon">
-
             <svg viewBox="0 0 24 24"><path d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>
-
           </div>
-
           <div class="row-label">تغيير اللغة</div>
-
         </div>
-
-
 
         <button class="pill-toggle" id="langToggle" type="button" aria-label="تبديل اللغة">
-
           <span class="pill-option" data-lang="en">EN</span>
-
           <span class="pill-option active" data-lang="ar">AR</span>
-
         </button>
-
       </div>
-
-
 
       <div class="account-row">
-
         <div class="row-right">
-
           <div class="row-icon">
-
             <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
-
           </div>
-
           <div class="row-label">المظهر</div>
-
         </div>
-
-
 
         <button class="pill-toggle" id="themeToggle" type="button" aria-label="تبديل المظهر">
-
           <span class="pill-option" data-mode="light">☀️</span>
-
           <span class="pill-option active" data-mode="dark">🌙</span>
-
         </button>
-
       </div>
 
-
-
       <div class="account-row" style="cursor:pointer;">
-
         <div class="row-right">
-
           <div class="row-icon">
-
             <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
-
           </div>
-
           <div class="row-text">
-
             <div class="row-label">المصادقة الثنائية</div>
-
             <div class="row-sub">معطلة</div>
-
           </div>
-
         </div>
-
         <span class="chevron-icon">‹</span>
-
       </div>
-
-
 
       <div class="account-row" style="cursor:pointer;">
-
         <div class="row-right">
-
           <div class="row-icon">
-
             <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-
           </div>
-
           <div class="row-label">مذكرة إعلامية</div>
-
         </div>
-
         <span class="chevron-icon">‹</span>
-
       </div>
-
-
 
     </div>
 
-
-
     <button class="logout-btn" type="button">
-
       <span>تسجيل الخروج</span>
-
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-
         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
-
       </svg>
-
     </button>
 
-
-
   </div>
-
 </section>
 
-
-
 <!-- =========================
-
      شريط التنقل
-
-     LTR يجعل أول زر على اليسار
-
 ========================= -->
-
-
 
 <nav class="nav" aria-label="التنقل الرئيسي">
 
-
-
-  <!-- اليسار: الرئيسية -->
-
   <button class="nav-item" type="button" data-target="view-home">
-
     <svg viewBox="0 0 24 24">
-
       <path d="M3 10.5L12 3l9 7.5V20a2 2 0 0 1-2 2h-4v-7h-6v7H5a2 2 0 0 1-2-2z"/>
-
     </svg>
-
     <span>الرئيسية</span>
-
   </button>
-
-
-
-  <!-- الوسط: بطاقاتي -->
 
   <button class="nav-item active" type="button" data-target="view-cards">
-
     <svg viewBox="0 0 24 24">
-
       <rect x="2" y="6" width="20" height="13" rx="2.5"/>
-
       <line x1="2" y1="11" x2="22" y2="11"/>
-
     </svg>
-
     <span>بطاقاتي</span>
-
   </button>
-
-
-
-  <!-- اليمين: حسابي -->
 
   <button class="nav-item" type="button" data-target="view-account">
-
     <svg viewBox="0 0 24 24">
-
       <circle cx="12" cy="8" r="4"/>
-
       <path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/>
-
     </svg>
-
     <span>حسابي</span>
-
   </button>
-
-
 
 </nav>
 
-
-
 <script>
-
 (function () {
-
-
 
   /* 1. التنقل بين الصفحات */
 
-
-
   var navItems = document.querySelectorAll('.nav-item');
-
   var views = document.querySelectorAll('.view');
-
-
 
   navItems.forEach(function (btn) {
 
-
-
     btn.addEventListener('click', function () {
-
-
 
       var targetId = btn.getAttribute('data-target');
 
-
-
       navItems.forEach(function (item) {
-
         item.classList.remove('active');
-
       });
-
-
 
       btn.classList.add('active');
 
-
-
       views.forEach(function (view) {
-
         view.classList.toggle('active', view.id === targetId);
-
       });
-
-
 
       window.scrollTo({ top: 0, behavior: 'instant' });
 
-
-
     });
 
-
-
   });
-
-
 
   /* 2. تقليب البطاقة */
 
-
-
   var scene = document.getElementById('cardScene');
-
   var front = scene.querySelector('.card-front');
-
   var back = scene.querySelector('.card-back');
-
-
 
   function toggleCard() {
 
-
-
     var state = !scene.classList.contains('is-flipped');
-
-
 
     scene.classList.toggle('is-flipped', state);
 
-
-
     scene.setAttribute('aria-pressed', state ? 'true' : 'false');
-
-
 
     front.setAttribute('aria-hidden', state ? 'true' : 'false');
 
-
-
     back.setAttribute('aria-hidden', state ? 'false' : 'true');
 
-
-
   }
-
-
 
   scene.addEventListener('click', toggleCard);
 
-
-
   scene.addEventListener('keydown', function (e) {
-
-
 
     if (e.key === 'Enter' || e.key === ' ') {
 
-
-
       e.preventDefault();
-
       toggleCard();
-
-
 
     }
 
-
-
   });
-
-
 
   /* 3. السلايدر التلقائي */
 
-
-
   var slides = document.querySelectorAll('.banner-slide');
-
   var dots = document.querySelectorAll('.banner-dot');
-
-
 
   var currentSlide = 0;
 
-
-
   function showSlide(index) {
-
-
 
     currentSlide = (index + slides.length) % slides.length;
 
-
-
     slides.forEach(function (slide, i) {
-
       slide.classList.toggle('active', i === currentSlide);
-
     });
-
-
 
     dots.forEach(function (dot, i) {
-
       dot.classList.toggle('active', i === currentSlide);
-
     });
-
-
 
   }
 
-
-
   var sliderTimer = setInterval(function () {
-
     showSlide(currentSlide + 1);
-
   }, 5000);
-
-
 
   dots.forEach(function (dot, index) {
 
-
-
     dot.addEventListener('click', function () {
-
       showSlide(index);
-
     });
 
-
-
   });
-
-
 
   /* 4. تبديل المظهر */
 
-
-
   var themeToggle = document.getElementById('themeToggle');
-
   var homeThemeBtn = document.getElementById('homeThemeBtn');
-
-
 
   function updateThemeUI() {
 
-
-
     var isDark = document.body.classList.contains('dark-theme');
-
-
 
     themeToggle.querySelectorAll('.pill-option').forEach(function (option) {
 
-
-
       var mode = option.getAttribute('data-mode');
 
-
-
       option.classList.toggle(
-
         'active',
-
         (isDark && mode === 'dark') ||
-
         (!isDark && mode === 'light')
-
       );
-
-
 
     });
 
-
-
   }
-
-
 
   function toggleTheme() {
 
-
-
     document.body.classList.toggle('dark-theme');
-
-
 
     updateThemeUI();
 
-
-
   }
-
-
 
   themeToggle.addEventListener('click', toggleTheme);
 
-
-
   homeThemeBtn.addEventListener('click', toggleTheme);
-
-
 
   /* 5. تبديل زر اللغة */
 
-
-
   var langToggle = document.getElementById('langToggle');
-
-
 
   langToggle.addEventListener('click', function () {
 
-
-
     langToggle.querySelectorAll('.pill-option').forEach(function (option) {
-
-
 
       option.classList.toggle('active');
 
-
-
     });
-
-
 
   });
 
+  /* 6. شاشة الدخول + ملء الشاشة */
 
+  var entryScreen = document.getElementById('entryScreen');
+  var enterBtn = document.getElementById('enterBtn');
+  var htmlStyle = document.documentElement.style;
+  var cardSceneEl = document.getElementById('cardScene');
+  var isSiteEntered = false;
 
-  /* تحديث حالة المظهر عند بداية التشغيل */
+  /* تثبيت حجم البطاقة بالقيمة الحالية قبل تفعيل ملء الشاشة
+     حتى تبقى جميع الخطوط و النسب كما هي تماماً */
 
+  function lockCardSize() {
 
+    if (!cardSceneEl) return;
 
-  updateThemeUI();
+    /* offsetWidth = العرض قبل تطبيق التحويل (rotate -90deg) */
+    var w = cardSceneEl.offsetWidth;
 
-
-
-
-  /* 6. شاشة الدخول وملء الشاشة */
-  var entryScreen = document.getElementById('entry-screen');
-  var enterSiteBtn = document.getElementById('enter-site-btn');
-  var fullscreenError = document.getElementById('fullscreen-error');
-  var savedFontSizes = [];
-
-  function freezeFontSizes() {
-    savedFontSizes = [];
-    document.querySelectorAll('body *').forEach(function (element) {
-      if (element === entryScreen || entryScreen.contains(element)) return;
-      var computedSize = window.getComputedStyle(element).fontSize;
-      if (computedSize) {
-        savedFontSizes.push({
-          element: element,
-          value: element.style.getPropertyValue('font-size'),
-          priority: element.style.getPropertyPriority('font-size')
-        });
-        element.style.setProperty('font-size', computedSize, 'important');
-      }
-    });
-  }
-
-  function restoreFontSizes() {
-    savedFontSizes.forEach(function (item) {
-      if (item.value) {
-        item.element.style.setProperty('font-size', item.value, item.priority);
-      } else {
-        item.element.style.removeProperty('font-size');
-      }
-    });
-    savedFontSizes = [];
-  }
-
-  enterSiteBtn.addEventListener('click', function () {
-    fullscreenError.style.display = 'none';
-
-    var request = document.documentElement.requestFullscreen ||
-                  document.documentElement.webkitRequestFullscreen;
-
-    if (!request) {
-      restoreFontSizes();
-      fullscreenError.style.display = 'block';
-      return;
+    if (w > 0) {
+      htmlStyle.setProperty('--card-w', w + 'px');
     }
 
-    try {
-      var result = request.call(document.documentElement);
-      if (result && typeof result.then === 'function') {
-        result.then(function () {
-          entryScreen.style.display = 'none';
-          document.body.classList.remove('site-locked');
-        }).catch(function () {
-          restoreFontSizes();
-          fullscreenError.style.display = 'block';
-        });
-      } else {
-        entryScreen.style.display = 'none';
-        document.body.classList.remove('site-locked');
-      }
-    } catch (error) {
-      restoreFontSizes();
-      fullscreenError.style.display = 'block';
+  }
+
+  function unlockCardSize() {
+
+    htmlStyle.removeProperty('--card-w');
+
+  }
+
+  /* طلب ملء الشاشة مع دعم المتصفحات المختلفة */
+
+  function requestFullscreen() {
+
+    var el = document.documentElement;
+
+    var req =
+      el.requestFullscreen ||
+      el.webkitRequestFullscreen ||
+      el.webkitRequestFullScreen ||
+      el.msRequestFullscreen;
+
+    if (req) {
+
+      try {
+
+        var result = req.call(el);
+
+        if (result && typeof result.catch === 'function') {
+          result.catch(function () {});
+        }
+
+      } catch (err) {}
+
     }
-  });
+
+  }
+
+  function enterSite() {
+
+    /* قفل الحجم قبل تغيّر أبعاد الـ viewport */
+    lockCardSize();
+
+    /* إخفاء شاشة الدخول */
+    entryScreen.classList.add('hidden');
+    entryScreen.setAttribute('aria-hidden', 'true');
+
+    isSiteEntered = true;
+
+    /* تفعيل ملء الشاشة */
+    requestFullscreen();
+
+  }
+
+  function exitSite() {
+
+    /* إعادة الحجم الطبيعي */
+    unlockCardSize();
+
+    /* إظهار شاشة الدخول */
+    entryScreen.classList.remove('hidden');
+    entryScreen.setAttribute('aria-hidden', 'false');
+
+    isSiteEntered = false;
+
+  }
+
+  enterBtn.addEventListener('click', enterSite);
+
+  /* مراقبة الخروج من ملء الشاشة */
 
   function handleFullscreenChange() {
-    var isFullscreen = !!(document.fullscreenElement ||
-                          document.webkitFullscreenElement);
 
-    if (isFullscreen) {
-      if (!savedFontSizes.length) freezeFontSizes();
-      entryScreen.style.display = 'none';
-      document.body.classList.remove('site-locked');
-    } else {
-      restoreFontSizes();
-      entryScreen.style.display = 'flex';
-      document.body.classList.add('site-locked');
-      fullscreenError.style.display = 'none';
+    var fsEl =
+      document.fullscreenElement ||
+      document.webkitFullscreenElement ||
+      document.msFullscreenElement;
+
+    if (!fsEl && isSiteEntered) {
+      exitSite();
     }
+
   }
 
   document.addEventListener('fullscreenchange', handleFullscreenChange);
   document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+  document.addEventListener('msfullscreenchange', handleFullscreenChange);
 
+  /* تحديث حالة المظهر عند بداية التشغيل */
+
+  updateThemeUI();
 
 })();
-
 </script>
 
-
-
-
-<!-- ملحوظة: الصور المشار إليها في الكود الأصلي يجب أن تكون بجانب هذا الملف وبأسمائها الأصلية. -->
 </body>
-
 </html>
