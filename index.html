@@ -73,7 +73,7 @@ button {
     radial-gradient(circle at 30% 20%, rgba(11,135,103,.18), transparent 45%),
     radial-gradient(circle at 75% 80%, rgba(212,175,55,.12), transparent 50%),
     var(--bg-main);
-  transition: opacity .4s ease, visibility .4s ease;
+  transition: opacity .35s ease, visibility .35s ease;
 }
 
 .entry-screen.hidden {
@@ -775,7 +775,6 @@ body.dark-theme .pill-option.active {
 
 /* =========================
    شريط التنقل السفلي
-   الرئيسية يسار - بطاقاتي وسط - حسابي يمين
 ========================= */
 
 .nav {
@@ -926,7 +925,7 @@ body.dark-theme .nav-item.active {
     <button id="enterBtn" class="entry-btn" type="button">دخول الموقع</button>
 
     <p class="entry-hint">
-      سيتم تفعيل ملء الشاشة لإخفاء شريط المتصفح<br>
+      سيتم محاولة تفعيل ملء الشاشة لإخفاء شريط المتصفح<br>
       اضغط زر Escape للخروج وإعادة عرض شاشة الدخول
     </p>
 
@@ -1508,33 +1507,73 @@ body.dark-theme .nav-item.active {
 
   });
 
-  /* 6. شاشة الدخول + ملء الشاشة */
+  /* ============================================================
+     6. شاشة الدخول + ملء الشاشة + تثبيت أحجام الخطوط والبطاقة
+     ============================================================ */
 
   var entryScreen = document.getElementById('entryScreen');
   var enterBtn = document.getElementById('enterBtn');
-  var htmlStyle = document.documentElement.style;
+  var rootStyle = document.documentElement.style;
   var cardSceneEl = document.getElementById('cardScene');
-  var isSiteEntered = false;
 
-  /* تثبيت حجم البطاقة بالقيمة الحالية قبل تفعيل ملء الشاشة
-     حتى تبقى جميع الخطوط و النسب كما هي تماماً */
+  var isSiteEntered = false;
+  var frozenElements = [];
+
+  /* تثبيت عرض البطاقة بالقيمة الحالية (px) حتى لا تتغير الأبعاد */
 
   function lockCardSize() {
 
     if (!cardSceneEl) return;
 
-    /* offsetWidth = العرض قبل تطبيق التحويل (rotate -90deg) */
     var w = cardSceneEl.offsetWidth;
 
     if (w > 0) {
-      htmlStyle.setProperty('--card-w', w + 'px');
+      rootStyle.setProperty('--card-w', w + 'px');
     }
 
   }
 
   function unlockCardSize() {
 
-    htmlStyle.removeProperty('--card-w');
+    rootStyle.removeProperty('--card-w');
+
+  }
+
+  /* تثبيت جميع أحجام الخطوط داخل البطاقة بقيمها الحالية (px)
+     حتى لا تتأثر بأي تغيير في viewport (بما فيه vw) */
+
+  function freezeCardFonts() {
+
+    unfreezeCardFonts();
+
+    if (!cardSceneEl) return;
+
+    var all = [cardSceneEl].concat(
+      Array.prototype.slice.call(cardSceneEl.querySelectorAll('*'))
+    );
+
+    all.forEach(function (el) {
+
+      var fs = window.getComputedStyle(el).fontSize;
+
+      if (fs) {
+
+        el.style.fontSize = fs;
+        frozenElements.push(el);
+
+      }
+
+    });
+
+  }
+
+  function unfreezeCardFonts() {
+
+    frozenElements.forEach(function (el) {
+      el.style.fontSize = '';
+    });
+
+    frozenElements = [];
 
   }
 
@@ -1566,28 +1605,49 @@ body.dark-theme .nav-item.active {
 
   }
 
+  /* دالة إعادة تطبيق الحماية بعد تغيّر الـ viewport
+     (فقط إن كان الحجم تغيّر فعلاً بعد قفل البطاقة) */
+
+  function reapplySafety() {
+
+    if (!isSiteEntered) return;
+
+    lockCardSize();
+    freezeCardFonts();
+
+  }
+
+  /* الدخول */
+
   function enterSite() {
 
-    /* قفل الحجم قبل تغيّر أبعاد الـ viewport */
+    /* 1. نجمّد أحجام الخطوط الحالية داخل البطاقة */
+    freezeCardFonts();
+
+    /* 2. نقفل عرض البطاقة عند قيمته الحالية */
     lockCardSize();
 
-    /* إخفاء شاشة الدخول */
+    /* 3. نخفي شاشة الدخول */
     entryScreen.classList.add('hidden');
     entryScreen.setAttribute('aria-hidden', 'true');
 
     isSiteEntered = true;
 
-    /* تفعيل ملء الشاشة */
+    /* 4. نطلب ملء الشاشة */
     requestFullscreen();
+
+    /* 5. نعيد التطبيق بعد أن يستقرّ الـ viewport (احتياطي) */
+    setTimeout(reapplySafety, 400);
 
   }
 
+  /* الخروج */
+
   function exitSite() {
 
-    /* إعادة الحجم الطبيعي */
+    unfreezeCardFonts();
     unlockCardSize();
 
-    /* إظهار شاشة الدخول */
     entryScreen.classList.remove('hidden');
     entryScreen.setAttribute('aria-hidden', 'false');
 
@@ -1597,7 +1657,7 @@ body.dark-theme .nav-item.active {
 
   enterBtn.addEventListener('click', enterSite);
 
-  /* مراقبة الخروج من ملء الشاشة */
+  /* مراقبة الخروج من ملء الشاشة (بكل البادئات) */
 
   function handleFullscreenChange() {
 
@@ -1606,6 +1666,7 @@ body.dark-theme .nav-item.active {
       document.webkitFullscreenElement ||
       document.msFullscreenElement;
 
+    /* لو خرجنا من ملء الشاشة ونحن داخل الموقع → أعد إظهار شاشة الدخول */
     if (!fsEl && isSiteEntered) {
       exitSite();
     }
@@ -1615,6 +1676,36 @@ body.dark-theme .nav-item.active {
   document.addEventListener('fullscreenchange', handleFullscreenChange);
   document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
   document.addEventListener('msfullscreenchange', handleFullscreenChange);
+
+  /* احتياطي: زر Escape إن لم يدعم المتصفح Fullscreen API */
+
+  document.addEventListener('keydown', function (e) {
+
+    if (e.key === 'Escape' && isSiteEntered) {
+
+      var fsEl =
+        document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.msFullscreenElement;
+
+      if (!fsEl) {
+        exitSite();
+      }
+
+    }
+
+  });
+
+  /* احتياطي: تغيّر حجم النافذة أثناء وضع الدخول (تدوير الشاشة مثلاً) */
+
+  window.addEventListener('resize', function () {
+
+    if (isSiteEntered) {
+      /* نعيد قفل الأحجام حتى لو تغيّر الـ viewport */
+      reapplySafety();
+    }
+
+  });
 
   /* تحديث حالة المظهر عند بداية التشغيل */
 
